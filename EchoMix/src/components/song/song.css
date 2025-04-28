@@ -71,3 +71,61 @@ html {
     font-size: 12px;
   }
 }
+/* Custom navbar styling */
+.navbar-light {
+  background-color: #ffffff !important; /* White background */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for contrast */
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: #333333 !important; /* Dark text color for readability */
+  font-weight: bold; /* Bold text for visibility */
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+  color: #007bff !important; /* Highlight color for links on hover */
+}
+
+.navbar-light .navbar-brand {
+  font-size: 2rem;
+  color: #333333 !important; /* Dark text color */
+}
+
+.navbar-light .navbar-toggler-icon {
+  background-color: #333333; /* Color for the toggle icon */
+}
+
+.navbar-light .form-control {
+  border-radius: 5px;
+  border: 2px solid #333333; /* Dark border for search bar */
+}
+
+.navbar-light .btn-light {
+  background-color: #f8f9fa !important;
+  border: 2px solid #333333 !important;
+}
+
+.navbar-light .btn-light:hover {
+  background-color: #e2e6ea !important;
+}
+
+.navbar-light .navbar-text a {
+  color: #333333; /* Profile icon text color */
+}
+
+.navbar-light .navbar-text a:hover {
+  color: #007bff; /* Profile icon hover effect */
+}
+
+/* Logo hover effects */
+.logo {
+  transition: filter 300ms ease-in-out;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.3));
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 15px rgba(97, 218, 250, 0.5));
+}

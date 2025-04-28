@@ -2,9 +2,9 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './song.css';
-import CustomNavbar from '../Navbar';
-import SongInfo from '../SongInfo';
-import Player from '../Player';
+import CustomNavbar from './Navbar';
+import SongInfo from './SongInfo';
+import Player from './Player';
 
 function Song() {
   return (

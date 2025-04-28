@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Navbar, Container, Form, InputGroup, Button } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
-import logo from '../logo.jpeg';
+import logo from './logo.jpeg';
 
 const CustomNavbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -15,12 +15,13 @@ const CustomNavbar = () => {
   return (
     <Navbar expand="lg" className="navbar-light bg-light m-2 mt-4" 
       style={{ 
-        backgroundImage: "url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/3cd770b2-3e49-4672-99fb-8483b9dd9bf0/dg2jzjx-09688ae9-5e0c-4ee5-9d25-7883937eae3f.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzNjZDc3MGIyLTNlNDktNDY3Mi05OWZiLTg0ODNiOWRkOWJmMFwvZGcyanpqeC0wOTY4OGFlOS01ZTBjLTRlZTUtOWQyNS03ODgzOTM3ZWFlM2YucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.iwFvYJ7UOMKb8rYfAhGxBG3-yCOrw4qixMtg7SLAlXI)",
+        backgroundColor: "rgba(255, 255, 255, 0.8)",  // Subtle white background
         backgroundSize: "cover",
         borderRadius: "10px",
         height: "auto",
         minHeight: "75px",
-        padding: "0.5rem"
+        padding: "0.5rem",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)"  // Light shadow to pop out
       }}>
       <Container fluid>
         <Navbar.Brand href="#" className="d-flex align-items-center me-3">
@@ -36,6 +37,7 @@ const CustomNavbar = () => {
             fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
             fontStyle: "italic",
             fontWeight: "bold", 
+            color: "#333",  // Dark text for contrast
             backdropFilter: "blur(2px)",
             whiteSpace: "nowrap"
           }}>
@@ -55,25 +57,27 @@ const CustomNavbar = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
-                  border: "2px solid black",
+                  border: "2px solid #ddd",  // Lighter border color
                   borderRadius: "5px",
-                  height: "40px"
+                  height: "40px",
+                  padding: "0.5rem"
                 }}
               />
               <Button 
                 variant="light" 
                 type="submit"
                 style={{
-                  border: "2px solid white",
+                  border: "2px solid #ddd",  // Match the border color
                   borderRadius: "5px",
                   height: "40px",
                   width: "40px",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center"
+                  justifyContent: "center",
+                  backgroundColor: "#f8f9fa"  // Lighter button color
                 }}
               >
-                <FaSearch />
+                <FaSearch color="#333" /> {/* Icon color dark to contrast with light background */}
               </Button>
             </InputGroup>
           </Form>
@@ -86,7 +90,8 @@ const CustomNavbar = () => {
                 style={{ 
                   height: "clamp(40px, 8vw, 55px)",
                   width: "clamp(40px, 8vw, 55px)",
-                  borderRadius: "50%"
+                  borderRadius: "50%",
+                  border: "2px solid #ddd",  // Light border to match
                 }}
               />
             </a>
