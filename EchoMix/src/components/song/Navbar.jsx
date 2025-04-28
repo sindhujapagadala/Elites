@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Navbar, Container, Form, InputGroup, Button } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
-import logo from '../assets/logo.jpeg';
+import logo from './echomix.jpeg';
 
 const CustomNavbar = () => {
   const [searchQuery, setSearchQuery] = useState('');

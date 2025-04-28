@@ -1,5 +1,5 @@
 import React from 'react';
-import songImage from '../assets/songphoto/meremehbob.jpeg';
+import songImage from './songphoto/meremehbob.jpeg';
 
 const SongInfo = () => {
   return (
