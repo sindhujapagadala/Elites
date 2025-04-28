@@ -27,7 +27,7 @@ const AboutUs = () => {
     { name: 'Vennela Varshini', rollNo: 'LCB2024021', branch: 'CSB', image: '/aboutus/vvpic.png', linkedin: 'https://www.linkedin.com/in/vennela-varshini-anasoori-457765320' },
     { name: 'Parth Khunt', rollNo: 'LCB2024023', branch: 'CSB', image: '/aboutus/parth.jpg', linkedin: 'https://www.linkedin.com/in/parth-khunt-0069b6325' },
     { name: 'Sindhuja', rollNo: 'LCI2024013', branch: 'CSAI', image: '/aboutus/sindhu.jpg', linkedin: 'https://www.linkedin.com/in/sindhuja-pagadala-a5a290325' },
-    { name: 'Pranav Panmand', rollNo: 'LCI2024025', branch: 'CSAI', image: '/aboutus/pranav.jpg', linkedin: 'https://www.linkedin.com/in/prasoon-patel-580907327' },
+    { name: 'Pranav Panmand', rollNo: 'LCI2024025', branch: 'CSAI', image: '/aboutus/pranav.jpg', linkedin: 'https://www.linkedin.com/in/pranav-panmand-914b33333?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app' },
     { name: 'Hansika Reddy', rollNo: 'LCI2024019', branch: 'CSAI', image: '/aboutus/hansika.jpeg', linkedin: 'https://www.linkedin.com/in/hansika-reddy-a32361325' },
     { name: 'Akash Thakur', rollNo: 'LCB2024037', branch: 'CSB', image: '/aboutus/akash.jpg', linkedin: 'https://www.linkedin.com/in/akash-thakur-96948532b' },
     { name: 'Hasini', rollNo: 'LCI2024018', branch: 'CSAI', image: '/aboutus/hasini.jpg', linkedin: 'https://www.linkedin.com/in/hasini-raja-a571a4325' },
