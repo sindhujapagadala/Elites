@@ -10,7 +10,6 @@ import { Nav } from 'react-bootstrap';
 function App() {
   return (
     <>
-  
      <LoginSignup></LoginSignup>
     </>
   );

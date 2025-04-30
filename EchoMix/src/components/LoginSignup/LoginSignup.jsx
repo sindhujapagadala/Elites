@@ -8,7 +8,6 @@ export default function AuthForm() {
         name: '',
         email: '',
         password: '',
-        confirmPassword: '',
         profilePic: null
     });
 
@@ -24,10 +23,8 @@ export default function AuthForm() {
         e.preventDefault();
         if (isLogin) {
             console.log('Logging in with:', { email: formData.email, password: formData.password });
-            // Add login logic here
         } else {
             console.log('Signing up with:', formData);
-            // Add signup logic here
         }
     };
 
