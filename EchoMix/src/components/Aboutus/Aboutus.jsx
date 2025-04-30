@@ -34,12 +34,11 @@ const AboutUs = () => {
   ];
 
   return (
-    <div className="aboutus-container">
-      {}
-      <header className="navbar">
-        <div className="logo">EchoMix</div>
+    <>
+      <header className="profile-header">
+        <div className="header-title">EchoMix</div>
       </header>
-
+    <div className="aboutus-container">
       <div className="aboutus-header">
         <h1>About Us</h1>
         <p className="subheading">One stop destination for all your music needs</p>
@@ -60,6 +59,7 @@ const AboutUs = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
