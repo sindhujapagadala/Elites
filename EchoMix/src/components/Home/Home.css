@@ -19,6 +19,7 @@
   flex-direction: column;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   border: 2px solid black;
+  justify-content: space-between;
   
 }
 
@@ -27,12 +28,13 @@
 }
 
 .pArtistAndNowPlayingContainer {
-  margin-top: 4%;
+
   min-height: 100%;
   display: flex;
 }
 
 .profileBar {
+
   min-width: 100%;
   min-height: 3em;
   display: flex;
@@ -49,14 +51,22 @@
 }
 
 .profileIconContainer {
-  position: absolute;
-  right: 3%;
+  display: flex;
+  gap: 30%;
+  width: 5%;
+  text-wrap: nowrap;
+  cursor: pointer;
+}
 
+.profileIconContainer p{
+  margin-top: 15%;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: 600;
 }
 
 .profileIconContainer img {
-  height: 2em;
-  border-radius: 50%;
+  width: 100%;
+  cursor: pointer;
 }
 
 .settingsIconContainer {

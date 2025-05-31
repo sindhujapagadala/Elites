@@ -1,7 +1,15 @@
 import React, { useContext, useState, useRef } from "react";
 import "./NavBar.css";
+import { useNavigate } from "react-router";
 
 function NavBar() {
+
+  const navigate = useNavigate();
+
+  function toUpload(){
+    navigate('/upload');
+  }
+
   return (
     <div className="navBar">
       <div className="libButtons">
@@ -15,7 +23,7 @@ function NavBar() {
         <div className="contTitle">My music</div>
         <li>Recently Played</li>
         <li>My Songs</li>
-        <li>Upload Song</li>
+        <li onClick={toUpload}>Upload Song</li>
       </div>
 
       <div className="moreOptionContainer">

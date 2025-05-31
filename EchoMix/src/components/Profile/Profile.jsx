@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
+import { useUser } from '../../UserContext/UserContext';
 import './Profile.css';
 
 const Profile = () => {
+
+  const {user} = useUser();
+  const imageId = user.imgId;
+
+  const profilePicSrc = (imageId!=null && imageId!="" )? `http://localhost:8080/user/image/${imageId}` : "https://avatar.iran.liara.run/public/boy?username=Ash";
+
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    name: 'Vennela Varshini',
+    name: `${user.userName}`,
     bio: 'Music lover. Frontend enthusiast. Developer at heart.',
     genre: 'Pop, Lo-fi, Indie',
-    image: '/profile/user.png',
+    image: `${profilePicSrc}`,
     preferences: ['Lo-fi', 'Indie', 'K-Pop']
   });
 
