@@ -106,34 +106,34 @@ public class SongController {
     }
 
     @GetMapping("/stream/{fileId}")
-public void streamSong(@PathVariable String fileId, HttpServletResponse response) {
-    ObjectId objectId;
-    try {
-        objectId = new ObjectId(fileId);
-    } catch (IllegalArgumentException e) {
-        response.setStatus(HttpStatus.BAD_REQUEST.value());
-        return;
-    }
+    public void streamSong(@PathVariable String fileId, HttpServletResponse response) {
+            ObjectId objectId;
+            try {
+                objectId = new ObjectId(fileId);
+            } catch (IllegalArgumentException e) {
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
+                return;
+            }
 
-    GridFSFile gridFSFile = gridFSBucket.find(new Document("_id", objectId)).first();
-    if (gridFSFile == null) {
-        response.setStatus(HttpStatus.NOT_FOUND.value());
-        return;
-    }
+            GridFSFile gridFSFile = gridFSBucket.find(new Document("_id", objectId)).first();
+            if (gridFSFile == null) {
+                response.setStatus(HttpStatus.NOT_FOUND.value());
+                return;
+            }
 
-    try (GridFSDownloadStream downloadStream = gridFSBucket.openDownloadStream(objectId)) {
-        response.setContentType("audio/mpeg");
-        response.setHeader("Content-Disposition", "inline; filename=\"" + gridFSFile.getFilename() + "\"");
-        byte[] buffer = new byte[4096];
-        int bytesRead;
-        while ((bytesRead = downloadStream.read(buffer)) != -1) {
-            response.getOutputStream().write(buffer, 0, bytesRead);
-        }
-        response.flushBuffer();
-    } catch (IOException e) {
-        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            try (GridFSDownloadStream downloadStream = gridFSBucket.openDownloadStream(objectId)) {
+                response.setContentType("audio/mpeg");
+                response.setHeader("Content-Disposition", "inline; filename=\"" + gridFSFile.getFilename() + "\"");
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = downloadStream.read(buffer)) != -1) {
+                    response.getOutputStream().write(buffer, 0, bytesRead);
+                }
+                response.flushBuffer();
+            } catch (IOException e) {
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            }
     }
-}
 
 
 
@@ -158,8 +158,8 @@ public void streamSong(@PathVariable String fileId, HttpServletResponse response
     
     @GetMapping("/playlist")
     public List<SongResponse> getPlaylistByLanguage(@RequestParam String language) {
-    List<Song> songs = songService.getSongsByLanguage(language);
-    return songs.stream().map(SongResponse::new).collect(Collectors.toList());
+        List<Song> songs = songService.getSongsByLanguage(language);
+        return songs.stream().map(SongResponse::new).collect(Collectors.toList());
     }
 
     

@@ -50,12 +50,17 @@ const PlaylistPage = () => {
         ) : (
           <div className="songs-grid">
             {songs.map((song) => (
-              <div key={song.id} className="song-card">
-                <h3 className="song-title">{song.songName}</h3>
-                <p className="song-artist">{song.artistName}</p>
-                <audio controls src={`http://localhost:8080/song/stream/684045b696066143bf88bbd7`} className="audio-player" />
-              </div>
-            ))}
+                <div key={song.id} className="song-card">
+                  <h3 className="song-title">{song.songName}</h3>
+                  <p className="song-artist">{song.artistName}</p>
+                  <audio
+                    controls
+                    src={`http://localhost:8080/song/stream/${song.songFile}`}
+                    className="audio-player"
+            />
+          </div>
+        ))}
+
           </div>
         )}
       </main>
