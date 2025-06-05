@@ -9,6 +9,10 @@ import Upload from './components/Upload/Upload';
 import Song from './components/song/Song'
 import { Nav } from 'react-bootstrap';
 import { UserProvider } from './UserContext/UserContext';
+import WatchLaterPage from './pages/WatchLaterPage';
+
+
+
 
 function App() {
   return (
@@ -20,6 +24,7 @@ function App() {
         <Route path='/home' element={<Home/>}></Route>
         <Route path='/profile' element={<Profile/>}></Route>
         <Route path='/upload' element={<Upload></Upload>}></Route>
+        <Route path="/watch-later" element={<WatchLaterPage />} />
       </Routes>
     </Router>
     </UserProvider>
