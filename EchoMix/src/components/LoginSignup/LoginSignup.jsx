@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useState,useEffect} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../UserContext/UserContext";
@@ -8,7 +8,7 @@ const USER_BASE_URL = "http://localhost:8080/user";
 const OTP_BASE_URL = "http://localhost:8080/otp";
 
 export default function LoginSignup() {
-  const { setUser } = useUser();
+  const { user,setUser } = useUser();
   const navigate = useNavigate();
 
   const [isLogin, setIsLogin] = useState(true);
@@ -20,6 +20,12 @@ export default function LoginSignup() {
   // Signup
   const [signupOtpSent, setSignupOtpSent] = useState(false);
   const [signupOtp, setSignupOtp] = useState("");
+
+  useEffect(()=>{
+    if(user) {
+      navigate("/home");
+    }
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -42,31 +48,14 @@ export default function LoginSignup() {
 
     if (isLogin) {
       try {
-        if (!otpSent) {
-          await axios.post(`${OTP_BASE_URL}/send-otp`, {
-            email: formData.email,
-          });
-          alert("OTP sent to your email.");
-          setOtpSent(true);
-        } else {
-          const verifyRes = await axios.post(
-            `${OTP_BASE_URL}/verify-otp?otp=${otp}`,
-            { email: formData.email }
-          );
+        const response = await axios.post(`${USER_BASE_URL}/login`, {
+          email: formData.email,
+          password: formData.password,
+        });
 
-          if (verifyRes.data === "OTP verified successfully!") {
-            const response = await axios.post(`${USER_BASE_URL}/login`, {
-              email: formData.email,
-              password: formData.password,
-            });
-
-            if (response.status === 200) {
-              setUser(response.data);
-              navigate("/home");
-            }
-          } else {
-            alert(verifyRes.data);
-          }
+        if (response.status === 200) {
+          setUser(response.data);
+          navigate("/home");
         }
       } catch (error) {
         alert("Error: " + (error.response?.data || error.message));
@@ -145,7 +134,7 @@ export default function LoginSignup() {
         <form className="form" onSubmit={handleSubmit}>
           {isLogin ? (
             <>
-              <h2>Secure Login</h2>
+              <h2>Login</h2>
               <input
                 type="email"
                 name="email"
@@ -162,16 +151,8 @@ export default function LoginSignup() {
                 onChange={handleChange}
                 required
               />
-              {otpSent && (
-                <input
-                  type="text"
-                  placeholder="Enter OTP"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  required
-                />
-              )}
-              <button type="submit">{otpSent ? "Verify & Login" : "Send OTP"}</button>
+              
+              <button type="submit" onClick={handleSubmit}>Login</button>
             </>
           ) : (
             <>
