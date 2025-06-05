@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,12 +59,14 @@ public class UserController {
             }
         }
 
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
         User user = new User();
         user.setUserName(name);
         user.setEmail(email);
-        user.setPassword(password);
+        user.setPassword(encoder.encode(password));
         user.setUserImg(imageId);
-        user.setImgId(user.getUserImg().toHexString());
+        user.setImgId(imageId != null ? imageId.toHexString() : null);
         user.setFollowers(0L);
         user.setDate(LocalDateTime.now());
 
@@ -87,7 +90,8 @@ public class UserController {
             return ResponseEntity.badRequest().body("User not found.");
         }
         User found = opt.get();
-        if (!found.getEmail().equals(request.getEmail()) || !found.getPassword().equals(request.getPassword())) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (!encoder.matches(request.getPassword(), found.getPassword())) {
             return ResponseEntity.badRequest().body("Email or password did not match.");
         }
         found.setPassword(null);

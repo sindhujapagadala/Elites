@@ -9,9 +9,11 @@ import Upload from './components/Upload/Upload';
 import Song from './components/song/Song'
 import { Nav } from 'react-bootstrap';
 import { UserProvider } from './UserContext/UserContext';
+
 import WatchLaterPage from './pages/WatchLaterPage';
 
-
+import Playlist from './components/playlist/PlaylistPage';
+import Category from './components/Category/Category';
 
 
 function App() {
@@ -24,7 +26,11 @@ function App() {
         <Route path='/home' element={<Home/>}></Route>
         <Route path='/profile' element={<Profile/>}></Route>
         <Route path='/upload' element={<Upload></Upload>}></Route>
+
         <Route path="/watch-later" element={<WatchLaterPage />} />
+
+        <Route path='/playlist' element={<Playlist/>}></Route>
+        <Route path='/category' element={<Category/>}></Route>
       </Routes>
     </Router>
     </UserProvider>

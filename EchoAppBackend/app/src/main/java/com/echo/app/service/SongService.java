@@ -1,5 +1,6 @@
 package com.echo.app.service;
 import java.util.Optional;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,4 +27,7 @@ public class SongService {
         songrepository.deleteById(id);
     }
 
+    public List<Song> getSongsByCategory(String category) {
+        return songrepository.findByCategoryIgnoreCase(category);
+    }
 }

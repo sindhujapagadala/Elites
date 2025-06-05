@@ -35,6 +35,9 @@ public class Song {
     @NonNull
     private ObjectId songFile;
 
+    @NonNull
+    private String category;
+    
     private LocalDateTime date;
 
 }   

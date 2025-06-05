@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.echo.app.entity.Song;
+import com.echo.app.entity.SongResponse;
 import com.echo.app.entity.User;
 import com.echo.app.service.SongService;
 import com.echo.app.service.UserService;
@@ -30,7 +32,9 @@ import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.gridfs.model.GridFSUploadOptions;
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/song")
 public class SongController {
@@ -48,6 +52,7 @@ public class SongController {
     public ResponseEntity<?> uploadSong(
             @RequestParam String songName,
             @RequestParam String artistName,
+            @RequestParam String category,
             @RequestParam MultipartFile file) {
 
         try (var inputStream = file.getInputStream()) {
@@ -64,7 +69,7 @@ public class SongController {
             song.setLikes(0L);
             song.setDisLikes(0L);
             song.setDate(LocalDateTime.now());
-
+            song.setCategory(category); 
             songService.saveSong(song);
             System.out.println("Saved song ID: " + song.getId());
             Optional<User> optUser = userService.findByUserName(artistName);
@@ -100,35 +105,39 @@ public class SongController {
         return ResponseEntity.badRequest().body("Song not found.");
     }
 
-    @GetMapping("/stream/{id}")
-    public void streamSong(@PathVariable ObjectId id, HttpServletResponse response) {
-        Optional<Song> songOpt = songService.getSong(id);
-        if (songOpt.isEmpty()) {
-            response.setStatus(HttpStatus.NOT_FOUND.value());
-            return;
-        }
-
-        Song song = songOpt.get();
-        GridFSFile gridFSFile = gridFSBucket.find(new Document("_id", song.getSongFile())).first();
-
-        if (gridFSFile == null) {
-            response.setStatus(HttpStatus.NOT_FOUND.value());
-            return;
-        }
-
-        try (GridFSDownloadStream downloadStream = gridFSBucket.openDownloadStream(gridFSFile.getObjectId())) {
-            response.setContentType("audio/mpeg");
-            response.setHeader("Content-Disposition", "inline; filename=\"" + gridFSFile.getFilename() + "\"");
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = downloadStream.read(buffer)) != -1) {
-                response.getOutputStream().write(buffer, 0, bytesRead);
+    @GetMapping("/stream/{fileId}")
+    public void streamSong(@PathVariable String fileId, HttpServletResponse response) {
+            ObjectId objectId;
+            try {
+                objectId = new ObjectId(fileId);
+            } catch (IllegalArgumentException e) {
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
+                return;
             }
-            response.flushBuffer();
-        } catch (IOException e) {
-            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
+
+            GridFSFile gridFSFile = gridFSBucket.find(new Document("_id", objectId)).first();
+            if (gridFSFile == null) {
+                response.setStatus(HttpStatus.NOT_FOUND.value());
+                return;
+            }
+
+            try (GridFSDownloadStream downloadStream = gridFSBucket.openDownloadStream(objectId)) {
+                response.setContentType("audio/mpeg");
+                response.setHeader("Content-Disposition", "inline; filename=\"" + gridFSFile.getFilename() + "\"");
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = downloadStream.read(buffer)) != -1) {
+                    response.getOutputStream().write(buffer, 0, bytesRead);
+                }
+                response.flushBuffer();
+            } catch (IOException e) {
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            }
     }
+
+
+
+
 
     @DeleteMapping("delete/{id}")
     public ResponseEntity<?> deleteSong(@PathVariable ObjectId id) {
@@ -146,5 +155,13 @@ public class SongController {
             return ResponseEntity.status(500).body("Failed to delete song: " + e.getMessage());
         }
     }
+    
+    @GetMapping("/playlist")
+    public List<SongResponse> getPlaylistByCategory(@RequestParam String category) {
+        List<Song> songs = songService.getSongsByCategory(category);
+        return songs.stream().map(SongResponse::new).collect(Collectors.toList());
+    }
+
+    
 
 }
