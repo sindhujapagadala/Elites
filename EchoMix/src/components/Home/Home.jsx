@@ -6,7 +6,7 @@ import ss from "./songSymbol.png";
 import { useUser } from "../../UserContext/UserContext";
 import { useNavigate } from "react-router";
 import axios from "axios";
-function createArtistCard(src,artistName) {
+function createArtistCard(src, artistName) {
   return (
     <div className="pArtistCardClass">
       <img src={src} className="pArtistCardImgClass" />
@@ -19,7 +19,7 @@ function displayHistory(imagesrc, songName, artistName) {
   return (
     <div className="historySongCard">
       <div className="hSongCardImg">
-        <img src={imagesrc} alt=""/>
+        <img src={imagesrc} alt="" />
       </div>
       <p className="artistTitle">{artistName}</p>
       <div className="songTitle">
@@ -30,45 +30,30 @@ function displayHistory(imagesrc, songName, artistName) {
 }
 
 function Home() {
-
   const { user } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) {
-      navigate("/",);
+      navigate("/");
     }
   }, [user, navigate]);
 
   if (user === null || user === undefined) {
-    return null; 
+    return null;
   }
 
-  function handleProfileClick(){
+  function handleProfileClick() {
     navigate("/profile");
   }
 
-  const popularArtists=[
+  const popularArtists = [
     "Drake",
-    "Billie Eilish",
+    " Billie Eilish",
     "Arijit Singh",
     "BTS",
-    "BlackPink"
-  ]
-
-
-
-  
-
-
-  const getArtistImgSrc = async (artistName)=>{
-      const response = await axios.get("http://localhost:8080/user/aritst/{artistName}");
-      const imgId = response.body.imgId;
-      const imgsrc = `http://localhost:8080/user/image/${imgId}`;
-      return imgsrc;
-  }
-
-
+    "BLACKPINK",
+  ];
 
   const sampleHistoryList = [
     {
@@ -97,16 +82,27 @@ function Home() {
     },
   ];
 
- function populateArtistList(artistName){
-  imageSrc = getArtistImgSrc(artistName);
-  createArtistCard(artistName,imageSrc);
- }
+    function getArtistImgSrc(artistName) {
+
+    return `http://localhost:8080/artist/image/${artistName}`;
+
+  }
+
+
+  function populateArtistList(artistName) {
+    let imageSrc = getArtistImgSrc(artistName);
+    return createArtistCard(imageSrc, artistName);
+  }
+
 
   function getUserImage() {
     const imageId = user.imgId;
     if (imageId !== null && imageId !== "") {
       return (
-        <img src={`http://localhost:8080/user/image/${imageId}`} alt="Profile" />
+        <img
+          src={`http://localhost:8080/user/image/${imageId}`}
+          alt="Profile"
+        />
       );
     } else {
       return (
@@ -117,7 +113,6 @@ function Home() {
       );
     }
   }
-
 
   return (
     <>
@@ -138,11 +133,7 @@ function Home() {
               />
             </div>
             <div className="profileIconContainer" onClick={handleProfileClick}>
-              <React.Fragment>
-                  {
-                    getUserImage()
-                  }
-              </React.Fragment>
+              <React.Fragment>{getUserImage()}</React.Fragment>
               <p>{user.userName}</p>
             </div>
           </div>
@@ -159,11 +150,7 @@ function Home() {
                   {popularArtists.map((artistName, index) => {
                     return (
                       <React.Fragment key={index}>
-                        {
-                          (artistName)=>{
-                            populateArtistList;
-                          }
-                        }
+                        {populateArtistList(artistName)}
                       </React.Fragment>
                     );
                   })}
@@ -203,13 +190,17 @@ function Home() {
                   <p className="playingSongName">SongName</p>
                   <p className="playingArtistName">ArtistName</p>
                 </div>
-                <audio className="audioBar"  controls preload="metadata" loop></audio>
+                <audio
+                  className="audioBar"
+                  controls
+                  preload="metadata"
+                  loop
+                ></audio>
               </div>
             </div>
           </div>
         </div>
       </div>
-  
     </>
   );
 }

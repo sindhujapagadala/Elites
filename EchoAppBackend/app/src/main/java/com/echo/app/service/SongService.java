@@ -27,7 +27,7 @@ public class SongService {
         songrepository.deleteById(id);
     }
 
-    public List<Song> getSongsByLanguage(String language) {
-        return songrepository.findByLanguageIgnoreCase(language);
+    public List<Song> getSongsByCategory(String category) {
+        return songrepository.findByCategoryIgnoreCase(category);
     }
 }

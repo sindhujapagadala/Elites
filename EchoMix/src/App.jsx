@@ -10,6 +10,7 @@ import Song from './components/song/Song'
 import { Nav } from 'react-bootstrap';
 import { UserProvider } from './UserContext/UserContext';
 import Playlist from './components/playlist/PlaylistPage';
+import Category from './components/Category/Category';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path='/profile' element={<Profile/>}></Route>
         <Route path='/upload' element={<Upload></Upload>}></Route>
         <Route path='/playlist' element={<Playlist/>}></Route>
+        <Route path='/category' element={<Category/>}></Route>
       </Routes>
     </Router>
     </UserProvider>

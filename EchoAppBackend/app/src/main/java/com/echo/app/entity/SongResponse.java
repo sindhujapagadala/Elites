@@ -23,7 +23,7 @@ public class SongResponse {
         this.likes = song.getLikes();
         this.disLikes = song.getDisLikes();
         this.songFile = song.getSongFile().toHexString();  // convert ObjectId to string
-        this.language = song.getLanguage();
+        this.language = song.getCategory();
         this.date = song.getDate();
     }
 }

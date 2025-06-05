@@ -19,6 +19,7 @@ export default function Upload() {
   const [formData, setFormData] = useState({
     songName: "",
     songFile: null,
+    category: "",
   });
 
   const handleChange = (e) => {
@@ -33,14 +34,19 @@ export default function Upload() {
     e.preventDefault();
       setIsUploading(true);
       const data = new FormData();
+
+
       data.append("songName", formData.songName);
       data.append("artistName", user.userName);
-
+      data.append("category", formData.category);
 
       if (formData.songFile) {
         data.append("file", formData.songFile);
       }
-
+      else{
+        alert("Please provide the song file.")
+        return;
+      }
       let axiosConfig = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -96,6 +102,26 @@ export default function Upload() {
                 accept="mp3/*"
                 onChange={handleChange}
               />
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required 
+                className="category-select"
+              >
+               
+            <option value="bollywood">Bollywood</option>
+            <option value="telugu">Telugu</option>
+            <option value="english">English</option>
+            <option value="punjabi">Punjabi</option>
+            <option value="hindi">Hindi</option>
+            <option value="k-pop">K-Pop</option>
+            <option value="pop">Pop</option>
+            <option value="rock">Rock</option>
+            <option value="jazz">Jazz</option>
+            <option value="classical">Classical</option>
+
+              </select>
               <button type="submit">{isUploading ? "Uploading..." : "Upload Song"}</button>
             </>
         </form>

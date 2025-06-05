@@ -7,5 +7,5 @@ import java.util.List;
 import com.echo.app.entity.Song;
 
 public interface SongRepository extends MongoRepository<Song,ObjectId> {
-    List<Song> findByLanguageIgnoreCase(String language);
+    List<Song> findByCategoryIgnoreCase(String category);
 }

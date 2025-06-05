@@ -10,6 +10,10 @@ function NavBar() {
     navigate('/upload');
   }
 
+  function toCategory(){
+    navigate('/category')
+  }
+
   return (
     <div className="navBar">
       <div className="libButtons">
@@ -17,7 +21,7 @@ function NavBar() {
         <li>Browse</li>
         <li>Artists</li>
         <li>Your Playlists</li>
-        <li>Category</li>
+        <li onClick={toCategory}>Category</li>
       </div>
       <div className="myMusicContainer">
         <div className="contTitle">My music</div>

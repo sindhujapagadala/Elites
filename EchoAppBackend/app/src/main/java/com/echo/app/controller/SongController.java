@@ -52,6 +52,7 @@ public class SongController {
     public ResponseEntity<?> uploadSong(
             @RequestParam String songName,
             @RequestParam String artistName,
+            @RequestParam String category,
             @RequestParam MultipartFile file) {
 
         try (var inputStream = file.getInputStream()) {
@@ -68,7 +69,7 @@ public class SongController {
             song.setLikes(0L);
             song.setDisLikes(0L);
             song.setDate(LocalDateTime.now());
-            song.setLanguage("English"); 
+            song.setCategory(category); 
             songService.saveSong(song);
             System.out.println("Saved song ID: " + song.getId());
             Optional<User> optUser = userService.findByUserName(artistName);
@@ -156,8 +157,8 @@ public class SongController {
     }
     
     @GetMapping("/playlist")
-    public List<SongResponse> getPlaylistByLanguage(@RequestParam String language) {
-        List<Song> songs = songService.getSongsByLanguage(language);
+    public List<SongResponse> getPlaylistByCategory(@RequestParam String category) {
+        List<Song> songs = songService.getSongsByCategory(category);
         return songs.stream().map(SongResponse::new).collect(Collectors.toList());
     }
 
