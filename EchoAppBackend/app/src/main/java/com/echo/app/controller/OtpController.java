@@ -66,7 +66,7 @@ public class OtpController{
             message.setTo(toEmail);
             message.setSubject("Your OTP Code");
             message.setText("Your OTP code is: " + otp);
-            message.setFrom("MS_DCkUHd@test-r6ke4n11ep9gon12.mlsender.net");
+            message.setFrom("abhinavneema22@gmail.com");
             emailSender.send(message);
             System.out.println("OTP email successfully sent to " + toEmail);
         } catch (Exception e) {
