@@ -15,7 +15,7 @@ function NavBar() {
 
   function toFeatures(){
     navigate('/features');
-=======
+  }
   function toAboutUs() {
     navigate("/aboutus");
   }

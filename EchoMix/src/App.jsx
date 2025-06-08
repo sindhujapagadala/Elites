@@ -26,6 +26,7 @@ function App() {
             <Route path='/playlist' element={<Playlist />} />
             <Route path='/category' element={<Category />} />
             <Route path='/aboutus' element={<Aboutus />} /> 
+            <Route path='/features' element={<Features />} />
           </Routes>
         </Router>
       </UserProvider>

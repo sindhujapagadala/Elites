@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Lottie from "lottie-react";
 import "./Features.css";
 import musicAnimation from "../../assets/animations/musicAnimation.json";
+import { useNavigate } from "react-router";
 
 const features = [
   {
@@ -86,6 +87,7 @@ const faqs = [
 ];
 
 const FeaturesPage = () => {
+  const navigate = useNavigate();
   const [openFAQIndex, setOpenFAQIndex] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -123,7 +125,9 @@ const FeaturesPage = () => {
       <section className="highlight-cta">
         <h2>Ready to Tune Into the Future?</h2>
         <p>Join thousands already vibing on our platform.</p>
-        <button className="glow-button">Get Started</button>
+        <button className="glow-button" onClick={()=>{
+          navigate('/');
+        }}>Get Started</button>
       </section>
 
       <section className="review-carousel">
