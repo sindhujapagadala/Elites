@@ -1,17 +1,20 @@
-import React, { useContext, useState, useRef } from "react";
+import React from "react";
 import "./NavBar.css";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 function NavBar() {
-
   const navigate = useNavigate();
 
-  function toUpload(){
-    navigate('/upload');
+  function toUpload() {
+    navigate("/upload");
   }
 
-  function toCategory(){
-    navigate('/category')
+  function toCategory() {
+    navigate("/category");
+  }
+
+  function toAboutUs() {
+    navigate("/aboutus");
   }
 
   return (
@@ -23,18 +26,19 @@ function NavBar() {
         <li>Your Playlists</li>
         <li onClick={toCategory}>Category</li>
       </div>
+
       <div className="myMusicContainer">
-        <div className="contTitle">My music</div>
+        <div className="contTitle">My Music</div>
         <li>Recently Played</li>
         <li>My Songs</li>
         <li onClick={toUpload}>Upload Song</li>
       </div>
 
       <div className="moreOptionContainer">
-        <div className="contTitle">More options</div>
-        <li>Contact us</li>
-        <li>About us</li>
-        <li>Rate us</li>
+        <div className="contTitle">More Options</div>
+        <li>Contact Us</li>
+        <li onClick={toAboutUs}>About Us</li>
+        <li>Rate Us</li>
       </div>
     </div>
   );
