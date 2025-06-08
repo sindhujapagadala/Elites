@@ -6,8 +6,7 @@ import LoginSignup from './components/LoginSignup/LoginSignup';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Profile from './components/Profile/Profile';
 import Upload from './components/Upload/Upload';
-import Song from './components/song/Song'
-import { Nav } from 'react-bootstrap';
+import Song from './components/song/Song';
 import { UserProvider } from './UserContext/UserContext';
 import Playlist from './components/playlist/PlaylistPage';
 import Category from './components/Category/Category';
@@ -16,19 +15,21 @@ import Features from './components/Features/Features';
 function App() {
   return (
     <>
-    <UserProvider>
-    <Router>
-      <Routes>
-      { <Route path='/' element={<LoginSignup/>}></Route> }
-        <Route path='/Home' element={<Home/>}></Route>
-        <Route path='/features' element={<Features/>}></Route>
-        <Route path='/profile' element={<Profile/>}></Route>
-        <Route path='/upload' element={<Upload></Upload>}></Route>
-        <Route path='/playlist' element={<Playlist/>}></Route>
-        <Route path='/category' element={<Category/>}></Route>
-      </Routes>
-    </Router>
-    </UserProvider>
+
+      <UserProvider>
+        <Router>
+          <Routes>
+            <Route path='/' element={<LoginSignup />} />
+            <Route path='/home' element={<Home />} />
+            <Route path='/profile' element={<Profile />} />
+            <Route path='/upload' element={<Upload />} />
+            <Route path='/playlist' element={<Playlist />} />
+            <Route path='/category' element={<Category />} />
+            <Route path='/aboutus' element={<Aboutus />} /> 
+          </Routes>
+        </Router>
+      </UserProvider>
+
     </>
   );
 }
