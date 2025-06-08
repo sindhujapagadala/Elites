@@ -11,6 +11,7 @@ import { Nav } from 'react-bootstrap';
 import { UserProvider } from './UserContext/UserContext';
 import Playlist from './components/playlist/PlaylistPage';
 import Category from './components/Category/Category';
+import Features from './components/Features/Features';
 
 function App() {
   return (
@@ -18,8 +19,9 @@ function App() {
     <UserProvider>
     <Router>
       <Routes>
-        <Route path='/' element={<LoginSignup/>}></Route>
-        <Route path='/home' element={<Home/>}></Route>
+      { <Route path='/' element={<LoginSignup/>}></Route> }
+        <Route path='/Home' element={<Home/>}></Route>
+        <Route path='/features' element={<Features/>}></Route>
         <Route path='/profile' element={<Profile/>}></Route>
         <Route path='/upload' element={<Upload></Upload>}></Route>
         <Route path='/playlist' element={<Playlist/>}></Route>

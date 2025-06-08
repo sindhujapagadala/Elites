@@ -11,7 +11,10 @@ function NavBar() {
   }
 
   function toCategory(){
-    navigate('/category')
+    navigate('/category');
+  }
+  function toFeatures(){
+    navigate('/features');
   }
 
   return (
@@ -29,11 +32,12 @@ function NavBar() {
         <li>My Songs</li>
         <li onClick={toUpload}>Upload Song</li>
       </div>
-
+      
       <div className="moreOptionContainer">
         <div className="contTitle">More options</div>
         <li>Contact us</li>
         <li>About us</li>
+        <li onClick={toFeatures}>Features</li>
         <li>Rate us</li>
       </div>
     </div>
