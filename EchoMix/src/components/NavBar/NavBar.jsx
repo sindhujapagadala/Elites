@@ -13,6 +13,9 @@ function NavBar() {
     navigate("/category");
   }
 
+  function toFeatures(){
+    navigate('/features');
+=======
   function toAboutUs() {
     navigate("/aboutus");
   }
@@ -33,12 +36,15 @@ function NavBar() {
         <li>My Songs</li>
         <li onClick={toUpload}>Upload Song</li>
       </div>
-
+      
       <div className="moreOptionContainer">
-        <div className="contTitle">More Options</div>
-        <li>Contact Us</li>
+
+        <div className="contTitle">More options</div>
+        <li>Contact us</li>
         <li onClick={toAboutUs}>About Us</li>
-        <li>Rate Us</li>
+        <li onClick={toFeatures}>Features</li>
+        <li>Rate us</li>
+
       </div>
     </div>
   );

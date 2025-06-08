@@ -10,10 +10,12 @@ import Song from './components/song/Song';
 import { UserProvider } from './UserContext/UserContext';
 import Playlist from './components/playlist/PlaylistPage';
 import Category from './components/Category/Category';
+import Features from './components/Features/Features';
 
 function App() {
   return (
     <>
+
       <UserProvider>
         <Router>
           <Routes>
@@ -27,6 +29,7 @@ function App() {
           </Routes>
         </Router>
       </UserProvider>
+
     </>
   );
 }
