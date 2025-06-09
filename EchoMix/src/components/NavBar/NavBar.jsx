@@ -19,6 +19,9 @@ function NavBar() {
   function toAboutUs() {
     navigate("/aboutus");
   }
+  function toContactUs(){
+    navigate("/contactUsPage");
+  }
 
   return (
     <div className="navBar">
@@ -40,7 +43,7 @@ function NavBar() {
       <div className="moreOptionContainer">
 
         <div className="contTitle">More options</div>
-        <li>Contact us</li>
+        <li onClick={toContactUs}>Contact us</li>
         <li onClick={toAboutUs}>About Us</li>
         <li onClick={toFeatures}>Features</li>
         <li>Rate us</li>
