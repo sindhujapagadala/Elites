@@ -12,7 +12,6 @@ const RateUs = () => {
         e.preventDefault();
         if (rating > 0) {
             setSubmitted(true);
-            // Here you would typically send the rating and feedback to your backend
             console.log({ rating, feedback });
         }
     };
