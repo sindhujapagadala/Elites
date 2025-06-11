@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Lottie from "lottie-react";
 import "./Features.css";
 import musicAnimation from "../../assets/animations/musicAnimation.json";
@@ -36,35 +37,15 @@ const features = [
     icon: "📱",
   },
   {
-  title: "Live Radio & Events",
-  description: "Tune into exclusive radio stations and live virtual concerts from your favorite artists.",
-  icon: "📻",
-},
-{
-  title: "Mood-Based Recommendations",
-  description: "Get music suggestions that match your current vibe, from chill to energetic.",
-  icon: "🧠",
-}
-
-];
-
-const reviews = [
-  {
-    name: "Arjun M.",
-    review: "The personalized playlists are spot-on. It’s like the app reads my mind!",
+    title: "Live Radio & Events",
+    description: "Tune into exclusive radio stations and live virtual concerts from your favorite artists.",
+    icon: "📻",
   },
   {
-    name: "Sneha R.",
-    review: "Offline mode saves me on long trips. Crystal-clear audio quality too!",
-  },
-  {
-    name: "Devika P.",
-    review: "Love the UI and smooth performance. Sharing music with friends is super fun!",
-  },
-  {
-    name: "Rahul D.",
-    review: "Finally found an app that promotes new indie artists. I’m hooked!",
-  },
+    title: "Mood-Based Recommendations",
+    description: "Get music suggestions that match your current vibe, from chill to energetic.",
+    icon: "🧠",
+  }
 ];
 
 const faqs = [
@@ -90,17 +71,25 @@ const FeaturesPage = () => {
   const navigate = useNavigate();
   const [openFAQIndex, setOpenFAQIndex] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [reviews, setReviews] = useState([]);
 
   const toggleFAQ = (index) => {
     setOpenFAQIndex(openFAQIndex === index ? null : index);
   };
 
   useEffect(() => {
+    // Fetch reviews from backend
+    axios.get("http://localhost:8080/reviews")
+      .then(response => setReviews(response.data))
+      .catch(error => console.error("Failed to fetch reviews:", error));
+  }, []);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % reviews.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [reviews]);
 
   return (
     <div className="features-page">
@@ -125,36 +114,36 @@ const FeaturesPage = () => {
       <section className="highlight-cta">
         <h2>Ready to Tune Into the Future?</h2>
         <p>Join thousands already vibing on our platform.</p>
-        <button className="glow-button" onClick={()=>{
-          navigate('/');
-        }}>Get Started</button>
+        <button className="glow-button" onClick={() => navigate('/')}>Get Started</button>
       </section>
 
-      <section className="review-carousel">
-        <h2>What Our Users Say</h2>
-        <div className="carousel-wrapper">
-          <div
-            className="carousel-track"
-            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-          >
-            {reviews.map((review, index) => (
-              <div className="carousel-slide" key={index}>
-                <p className="review-text">“{review.review}”</p>
-                <p className="review-author">— {review.name}</p>
-              </div>
+      {reviews.length > 0 && (
+        <section className="review-carousel">
+          <h2>What Our Users Say</h2>
+          <div className="carousel-wrapper">
+            <div
+              className="carousel-track"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            >
+              {reviews.map((review, index) => (
+                <div className="carousel-slide" key={index}>
+                  <p className="review-text">“{review.message}”</p>
+                  <p className="review-author">— {review.username}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="carousel-controls">
+            {reviews.map((_, index) => (
+              <button
+                key={index}
+                className={`dot ${index === currentSlide ? "active" : ""}`}
+                onClick={() => setCurrentSlide(index)}
+              ></button>
             ))}
           </div>
-        </div>
-        <div className="carousel-controls">
-          {reviews.map((_, index) => (
-            <button
-              key={index}
-              className={`dot ${index === currentSlide ? "active" : ""}`}
-              onClick={() => setCurrentSlide(index)}
-            ></button>
-          ))}
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="faqs-section">
         <h2>Frequently Asked Questions</h2>
