@@ -3,15 +3,18 @@ package com.echo.app.controller;
 import com.echo.app.entity.OtpDetails;
 import com.echo.app.entity.OtpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/otp")
+
 public class OtpController{
 
     @Autowired
@@ -31,6 +34,21 @@ public class OtpController{
             return "Failed to send OTP. Please try again later.";
         }
     }
+   @PostMapping("/resend")
+   public String resendOtp(@RequestBody OtpRequest otpRequest) {
+    String newOtp = generateOtp();
+    try {
+        sendOtpEmail(otpRequest.getEmail(), newOtp);
+        otpStore.put(otpRequest.getEmail(), new OtpDetails(newOtp, System.currentTimeMillis()));
+        return "OTP resent to " + otpRequest.getEmail();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Failed to resend OTP. Please try again later.";
+        }
+}
+
+
+
 
     @PostMapping("/verify-otp")
     public String verifyOtp(@RequestBody OtpRequest otpRequest, @RequestParam String otp) {

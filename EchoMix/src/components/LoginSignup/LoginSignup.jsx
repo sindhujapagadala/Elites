@@ -1,4 +1,4 @@
-import React, { use, useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../UserContext/UserContext";
@@ -8,25 +8,11 @@ const USER_BASE_URL = "http://localhost:8080/user";
 const OTP_BASE_URL = "http://localhost:8080/otp";
 
 export default function LoginSignup() {
-  const { user,setUser } = useUser();
+  const { user, setUser } = useUser();
   const navigate = useNavigate();
-
   const [isLogin, setIsLogin] = useState(true);
 
-  // Login
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
-
-  // Signup
-  const [signupOtpSent, setSignupOtpSent] = useState(false);
-  const [signupOtp, setSignupOtp] = useState("");
-
-  useEffect(()=>{
-    if(user) {
-      navigate("/home");
-    }
-  });
-
+  // Form and OTP states
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -34,6 +20,13 @@ export default function LoginSignup() {
     confirmPassword: "",
     profilePic: null,
   });
+
+  const [signupOtpSent, setSignupOtpSent] = useState(false);
+  const [signupOtp, setSignupOtp] = useState("");
+
+  useEffect(() => {
+    if (user) navigate("/home");
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -43,42 +36,62 @@ export default function LoginSignup() {
     }));
   };
 
+  const sendOtp = async () => {
+    try {
+      await axios.post(`${OTP_BASE_URL}/send-otp`, { email: formData.email });
+      alert("OTP sent to your email.");
+      setSignupOtpSent(true);
+    } catch (error) {
+      alert("Failed to send OTP: " + (error.response?.data || error.message));
+    }
+  };
+
+  const resendOtp = async () => {
+  try {
+    await axios.post(`${OTP_BASE_URL}/resend`, { email: formData.email });
+    alert("OTP resent to your email.");
+    setSignupOtpSent(true);
+  } catch (error) {
+    const errorMsg =
+      typeof error.response?.data === "string"
+        ? error.response.data
+        : error.response?.data?.message || error.message;
+
+    alert("Failed to resend OTP: " + errorMsg);
+  }
+};
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (isLogin) {
+      // Login flow
       try {
         const response = await axios.post(`${USER_BASE_URL}/login`, {
           email: formData.email,
           password: formData.password,
         });
 
-        if (response.status === 200) {
-          setUser(response.data);
-          navigate("/home");
-        }
+        setUser(response.data);
+        navigate("/home");
       } catch (error) {
-        alert("Error: " + (error.response?.data || error.message));
+        alert("Login error: " + (error.response?.data || error.message));
       }
     } else {
+      // Signup flow
       try {
         if (!signupOtpSent) {
-          await axios.post(`${OTP_BASE_URL}/send-otp`, {
-            email: formData.email,
-          });
-          alert("OTP sent to your email.");
-          setSignupOtpSent(true);
+          await sendOtp();
         } else {
+          // Verify OTP
           const verifyRes = await axios.post(
             `${OTP_BASE_URL}/verify-otp?otp=${signupOtp}`,
             { email: formData.email }
           );
 
           if (verifyRes.data === "OTP verified successfully!") {
-            const axiosConfig = {
-              headers: { "Content-Type": "multipart/form-data" },
-            };
-
             const data = new FormData();
             data.append("name", formData.name);
             data.append("email", formData.email);
@@ -90,19 +103,19 @@ export default function LoginSignup() {
             const response = await axios.post(
               `${USER_BASE_URL}/create`,
               data,
-              axiosConfig
+              {
+                headers: { "Content-Type": "multipart/form-data" },
+              }
             );
 
-            if (response.status === 200) {
-              setUser(response.data);
-              navigate("/home");
-            }
+            setUser(response.data);
+            navigate("/home");
           } else {
-            alert(verifyRes.data);
+            alert("Invalid OTP");
           }
         }
       } catch (error) {
-        alert("Signup Error: " + (error.response?.data || error.message));
+        alert("Signup error: " + (error.response?.data || error.message));
       }
     }
   };
@@ -115,7 +128,8 @@ export default function LoginSignup() {
             className={isLogin ? "active" : ""}
             onClick={() => {
               setIsLogin(true);
-              setOtpSent(false);
+              setSignupOtpSent(false);
+              setSignupOtp("");
             }}
           >
             Login
@@ -125,6 +139,7 @@ export default function LoginSignup() {
             onClick={() => {
               setIsLogin(false);
               setSignupOtpSent(false);
+              setSignupOtp("");
             }}
           >
             Signup
@@ -151,8 +166,7 @@ export default function LoginSignup() {
                 onChange={handleChange}
                 required
               />
-              
-              <button type="submit" >Login</button>
+              <button type="submit">Login</button>
             </>
           ) : (
             <>
@@ -195,15 +209,22 @@ export default function LoginSignup() {
                 accept="image/*"
                 onChange={handleChange}
               />
+
               {signupOtpSent && (
-                <input
-                  type="text"
-                  placeholder="Enter OTP"
-                  value={signupOtp}
-                  onChange={(e) => setSignupOtp(e.target.value)}
-                  required
-                />
+                <>
+                  <input
+                    type="text"
+                    placeholder="Enter OTP"
+                    value={signupOtp}
+                    onChange={(e) => setSignupOtp(e.target.value)}
+                    required
+                  />
+                  <button type="button" onClick={resendOtp}>
+                    Resend OTP
+                  </button>
+                </>
               )}
+
               <button type="submit">
                 {signupOtpSent ? "Verify OTP & Signup" : "Send OTP"}
               </button>
