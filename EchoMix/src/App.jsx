@@ -12,8 +12,12 @@ import Playlist from './components/playlist/PlaylistPage';
 import Category from './components/Category/Category';
 import Features from './components/Features/Features';
 import ContactUsPage from './components/ContactUs/ContactUsPage';
+<<<<<<< feature/review-submission
+import Rateus from './components/Rateus/Rateus';
+=======
 import Browse from './components/Browse/Browse';
 import RateUs from './components/Rateus/Rateus';
+>>>>>>> main
 
 function App() {
   return (
@@ -31,8 +35,12 @@ function App() {
             <Route path='/aboutus' element={<Aboutus />} /> 
             <Route path='/features' element={<Features />} />
             <Route path='/contactUsPage' element={<ContactUsPage />} />
+<<<<<<< feature/review-submission
+            <Route path='/rateus' element={<Rateus />} />
+=======
             <Route path='/browse' element={<Browse />} />
             <Route path='/rateus' element={<RateUs />} />
+>>>>>>> main
           </Routes>
         </Router>
       </UserProvider>
