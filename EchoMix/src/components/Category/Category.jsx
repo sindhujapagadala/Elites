@@ -85,6 +85,7 @@ const Category = () => {
                 />
               </div>
             ))}
+            <div className="spacer"></div>
           </div>
         )}
       </main>

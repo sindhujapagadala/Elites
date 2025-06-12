@@ -52,10 +52,10 @@ function Home() {
 
   const popularArtists = [
     "Drake",
-    " Billie Eilish",
+    "Billie Eilish",
     "Arijit Singh",
     "BTS",
-    "BLACKPINK",
+    "Blackpink",
   ];
 
   function getUserHistory() {

@@ -19,7 +19,7 @@ export default function Upload() {
   const [formData, setFormData] = useState({
     songName: "",
     songFile: null,
-    category: "",
+    category: "bollywood",
   });
 
   const handleChange = (e) => {
@@ -122,7 +122,7 @@ export default function Upload() {
             <option value="classical">Classical</option>
 
               </select>
-              <button type="submit">{isUploading ? "Uploading..." : "Upload Song"}</button>
+              <button type="submit" disabled={isUploading}>{isUploading ? "Uploading..." : "Upload Song"}</button>
             </>
         </form>
       </div>
