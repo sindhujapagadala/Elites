@@ -22,6 +22,7 @@ function NavBar() {
   function toContactUs(){
     navigate("/contactUsPage");
   }
+
   function toBrowse(){
     navigate("/browse");
   }
@@ -57,6 +58,7 @@ function NavBar() {
         <li onClick={toAboutUs}>About Us</li>
         <li onClick={toFeatures}>Features</li>
         <li onClick={toRateUs}>Rate us</li>
+
 
       </div>
     </div>
