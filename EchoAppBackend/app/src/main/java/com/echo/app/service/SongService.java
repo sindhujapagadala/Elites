@@ -1,4 +1,5 @@
 package com.echo.app.service;
+
 import java.util.Optional;
 import java.util.List;
 
@@ -15,19 +16,23 @@ public class SongService {
     @Autowired
     private SongRepository songrepository;
 
-    public void saveSong(Song song){
+    public void saveSong(Song song) {
         songrepository.save(song);
     }
 
-    public Optional<Song> getSong(ObjectId id){
+    public Optional<Song> getSong(ObjectId id) {
         return songrepository.findById(id);
     }
 
-    public void deleteById(ObjectId id){
+    public void deleteById(ObjectId id) {
         songrepository.deleteById(id);
     }
 
     public List<Song> getSongsByCategory(String category) {
         return songrepository.findByCategoryIgnoreCase(category);
+    }
+
+    public List<Song> searchSongsByName(String keyword) {
+        return songrepository.findBySongNameContainingIgnoreCase(keyword);
     }
 }
