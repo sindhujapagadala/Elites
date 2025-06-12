@@ -22,12 +22,18 @@ function NavBar() {
   function toContactUs(){
     navigate("/contactUsPage");
   }
+  function toBrowse(){
+    navigate("/browse");
+  }
 
+  function toRateUs(){
+    navigate("/rateus");
+  }
   return (
     <div className="navBar">
       <div className="libButtons">
         <div className="contTitle">Library</div>
-        <li>Browse</li>
+        <li onClick={toBrowse}>Browse</li>
         <li>Artists</li>
         <li>Your Playlists</li>
         <li onClick={toCategory}>Category</li>
@@ -46,7 +52,7 @@ function NavBar() {
         <li onClick={toContactUs}>Contact us</li>
         <li onClick={toAboutUs}>About Us</li>
         <li onClick={toFeatures}>Features</li>
-        <li>Rate us</li>
+        <li onClick={toRateUs}>Rate us</li>
 
       </div>
     </div>
