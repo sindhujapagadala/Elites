@@ -123,3 +123,26 @@ body, .playlist-page {
   width: 100%;
   height: 10%;
 }
+.song-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.like-btn, .dislike-btn {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.like-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.dislike-btn {
+  background-color: #f44336;
+  color: white;
+}

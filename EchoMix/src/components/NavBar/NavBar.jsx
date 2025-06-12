@@ -22,17 +22,15 @@ function NavBar() {
   function toContactUs(){
     navigate("/contactUsPage");
   }
-<<<<<<< feature/review-submission
-  function torateus(){
-    navigate("/rateus");
-=======
   function toBrowse(){
     navigate("/browse");
->>>>>>> main
   }
 
   function toRateUs(){
     navigate("/rateus");
+  }
+  function toLikedSongs(){
+    navigate("/liked");
   }
   return (
     <div className="navBar">
@@ -48,6 +46,7 @@ function NavBar() {
         <div className="contTitle">My Music</div>
         <li>Recently Played</li>
         <li>My Songs</li>
+        <li onClick={toLikedSongs}>Liked Songs</li>
         <li onClick={toUpload}>Upload Song</li>
       </div>
       
@@ -57,11 +56,7 @@ function NavBar() {
         <li onClick={toContactUs}>Contact us</li>
         <li onClick={toAboutUs}>About Us</li>
         <li onClick={toFeatures}>Features</li>
-<<<<<<< feature/review-submission
-        <li onClick={torateus}>Rate us</li>
-=======
         <li onClick={toRateUs}>Rate us</li>
->>>>>>> main
 
       </div>
     </div>
