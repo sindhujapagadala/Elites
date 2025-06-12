@@ -7,12 +7,34 @@ const RateUs = () => {
     const [hover, setHover] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [feedback, setFeedback] = useState('');
+    const [name, setName] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (rating > 0) {
-            setSubmitted(true);
-            console.log({ rating, feedback });
+        if (rating > 0 && name.trim() !== '') {
+            try {
+                const res = await fetch('http://localhost:8080/reviews', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: name.trim(),
+                        message: feedback.trim(),
+                    }),
+                });
+
+                if (res.ok) {
+                    console.log('Review submitted');
+                    setSubmitted(true);
+                } else {
+                    console.error('Failed to submit review');
+                }
+            } catch (err) {
+                console.error('Error:', err);
+            }
+        } else {
+            alert('Please provide your name and a rating.');
         }
     };
 
@@ -21,6 +43,7 @@ const RateUs = () => {
         setHover(null);
         setSubmitted(false);
         setFeedback('');
+        setName('');
     };
 
     const getEmoji = () => {
@@ -34,7 +57,7 @@ const RateUs = () => {
             <div className="rateus-container submitted">
                 <div className="thank-you-message">
                     {getEmoji()}
-                    <h2>Thank You!</h2>
+                    <h2>Thank You, {name}!</h2>
                     <p>We appreciate your {rating}-star rating{feedback && ' and feedback'}!</p>
                     <button onClick={resetRating} className="rate-again-btn">
                         Rate Again
@@ -84,6 +107,18 @@ const RateUs = () => {
                                 </label>
                             );
                         })}
+                    </div>
+
+                    {/* 👇 Name Input Section */}
+                    <div className="name-section">
+                        <label htmlFor="name">Your Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
                     </div>
 
                     <div className="feedback-section">

@@ -22,6 +22,9 @@ function NavBar() {
   function toContactUs(){
     navigate("/contactUsPage");
   }
+  function torateus(){
+    navigate("/rateus");
+  }
 
   return (
     <div className="navBar">
@@ -46,7 +49,7 @@ function NavBar() {
         <li onClick={toContactUs}>Contact us</li>
         <li onClick={toAboutUs}>About Us</li>
         <li onClick={toFeatures}>Features</li>
-        <li>Rate us</li>
+        <li onClick={torateus}>Rate us</li>
 
       </div>
     </div>
