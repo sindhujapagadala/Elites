@@ -15,7 +15,9 @@ function Home() {
 
   function createArtistCard(src, artistName) {
     return (
-      <div className="pArtistCardClass">
+      <div className="pArtistCardClass" onClick={()=>{
+         navigate(`/artist/${artistName}`)
+      }}>
         <img src={src} className="pArtistCardImgClass" />
         <p>{`${artistName}`}</p>
       </div>

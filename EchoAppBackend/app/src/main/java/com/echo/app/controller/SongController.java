@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -195,6 +194,28 @@ public class SongController {
             return ResponseEntity.badRequest().body("User not found.");
         }
     }
+
+    @GetMapping("/getArtistSongs/{artistName}")
+    public ResponseEntity<?> getArtistSongs(@PathVariable String artistName) {
+         Optional<User> userOpt = userService.findByUserName(artistName);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            List<String> artistSongs = user.getUserSongs();
+            List<Song> matchedSongs= new ArrayList<>();
+            for(String songId : artistSongs) {
+                Optional<Song> matchedSong = songService.getSong(new ObjectId(songId));
+                matchedSong.ifPresent(matchedSongs::add);
+            }
+            List<SongResponse> responseList = matchedSongs.stream()
+                .map(SongResponse::new)
+                .collect(Collectors.toList());
+
+            return ResponseEntity.ok().body(responseList);
+        } else {
+            return ResponseEntity.badRequest().body("User not found.");
+        }
+    }
+    
 
     @DeleteMapping("delete/{id}")
     public ResponseEntity<?> deleteSong(@PathVariable ObjectId id) {

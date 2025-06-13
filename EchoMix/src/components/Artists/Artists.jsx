@@ -43,8 +43,7 @@ function Artists() {
         key={index}
         className="Artists-songCard"
         onClick={() => {
-          // Optional: go to artist detail page in future
-          console.log(artist)
+          navigate(`/artist/${artist.userName}`)
         }}
       >
         <img

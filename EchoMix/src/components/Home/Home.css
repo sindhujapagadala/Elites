@@ -190,12 +190,13 @@
 
 .historyList {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   overflow: scroll;
   z-index: 2;
+  background-color: rgb(255, 255, 255);
+  margin-bottom: 5%;
 }
 
 .historyList::-webkit-scrollbar{

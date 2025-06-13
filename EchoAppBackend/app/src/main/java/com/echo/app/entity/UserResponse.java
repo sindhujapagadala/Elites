@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -15,6 +16,7 @@ public class UserResponse {
     private boolean isArtist;
     private String imgId;
     private LocalDateTime date;
+    private List<String> userSongs;
 
     public UserResponse(User user) {
         ObjectId userId = user.getId();
@@ -25,5 +27,6 @@ public class UserResponse {
         this.isArtist = user.isArtist();
         this.imgId = user.getImgId();
         this.date = user.getDate();
+        this.userSongs = user.getUserSongs();
     }
 }

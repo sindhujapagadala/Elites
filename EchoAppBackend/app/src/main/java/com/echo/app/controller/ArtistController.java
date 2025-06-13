@@ -73,4 +73,19 @@ public class ArtistController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/search/{artistName}")
+    public ResponseEntity<UserResponse> getArtistByName(@PathVariable String artistName) {
+        Optional<User> optionalUser = userService.findByUserName(artistName);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (user.isArtist()) {
+                return ResponseEntity.ok(new UserResponse(user));
+            } else {
+                return ResponseEntity.status(HttpServletResponse.SC_FORBIDDEN).build();
+            }
+        } else {
+            return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).build();
+        }
+    }
+
 }

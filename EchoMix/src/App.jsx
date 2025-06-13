@@ -16,6 +16,7 @@ import Browse from './components/Browse/Browse';
 import RateUs from './components/Rateus/Rateus';
 import Artists from './components/Artists/Artists';
 import RecentlyePlayed from './components/RecentlyPlayed/RecentlyPlayed';
+import Artist from './components/Artist/Artist';
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
             <Route path='/rateus' element={<RateUs />} />
             <Route path='/artists' element={<Artists/>} />
             <Route path='/recentlyPlayed' element={<RecentlyePlayed />} />
+            <Route path='/artist/:artistName' element={<Artist />} />
           </Routes>
         </Router>
       </UserProvider>
