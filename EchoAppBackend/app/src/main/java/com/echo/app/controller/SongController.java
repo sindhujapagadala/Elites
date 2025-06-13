@@ -179,16 +179,18 @@ public class SongController {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             List<String> recentlyPlayed = user.getRecentlyPlayed();
-
-            List<Song> historyList = new ArrayList<>();
-            for (String songId : recentlyPlayed) {
-                Optional<Song> songOpt = songService.getSong(new ObjectId(songId));
-                if (songOpt.isPresent()) {
-                    historyList.add(songOpt.get());
-                }
+            List<Song> matchedSongs= new ArrayList<>();
+            for(String songId : recentlyPlayed) {
+                Optional<Song> matchedSong = songService.getSong(new ObjectId(songId));
+                matchedSong.ifPresent(matchedSongs::add);
             }
+            List<SongResponse> responseList = matchedSongs.stream()
+                .map(SongResponse::new)
+                .collect(Collectors.toList());
 
-            return ResponseEntity.ok().body(historyList);
+
+
+            return ResponseEntity.ok().body(responseList);
         } else {
             return ResponseEntity.badRequest().body("User not found.");
         }

@@ -30,13 +30,22 @@ function NavBar() {
   function toRateUs(){
     navigate("/rateus");
   }
+
+  function toArtists(){
+    navigate("/artists");
+  }
+
+  function toHome() {
+    navigate("/home");
+  }
+
   return (
     <div className="navBar">
       <div className="libButtons">
         <div className="contTitle">Library</div>
+        <li onClick={toHome}>Home</li>
         <li onClick={toBrowse}>Browse</li>
-        <li>Artists</li>
-        <li>Your Playlists</li>
+        <li onClick={toArtists}>Artists</li>
         <li onClick={toCategory}>Category</li>
       </div>
 

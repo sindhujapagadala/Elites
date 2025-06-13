@@ -7,6 +7,8 @@ import { useUser } from "../../UserContext/UserContext";
 import { useNavigate } from "react-router";
 import axios from "axios";
 
+
+
 function Home() {
   const { user, song, setSong } = useUser();
   const navigate = useNavigate();
@@ -22,19 +24,6 @@ function Home() {
     );
   }
 
-  function displayHistory(imagesrc, songName, artistName) {
-    return (
-      <div className="historySongCard">
-        <div className="hSongCardImg">
-          <img src={imagesrc} alt="" />
-        </div>
-        <p className="artistTitle">{artistName}</p>
-        <div className="songTitle">
-          <p>{songName}</p>
-        </div>
-      </div>
-    );
-  }
 
   useEffect(() => {
     if (!user) {
@@ -78,18 +67,19 @@ function Home() {
 
   useEffect(() => {
     getUserHistory();
-  }, [song]);
+  }, []);
 
 
   useEffect(() => {
     if (historyList.length > 0) {
 
       setSampleHistoryList(
-        historyList.map((song) => ({
-          image: `http://localhost:8080/artist/image/${song.artistName}`,
-          songName: song.songName,
-          artistName: song.artistName,
-        }))
+        historyList.map((song) =>song
+          // image: `http://localhost:8080/artist/image/${song.artistName}`,
+          // songName: song.songName,
+          // artistName: song.artistName,
+          
+        )
       );
     }
   }, [historyList]);
@@ -120,6 +110,36 @@ function Home() {
         />
       );
     }
+  }
+
+  async function handleSongClick(song) {
+    try {
+      await axios.get(
+        `http://localhost:8080/song/updateList/${user.userName}/${song.id}`
+      );
+    } catch (error) {
+      console.error("Error updating song list:", error);
+    }
+    getUserHistory();
+  }
+
+  function displayHistory(src) {
+    return (
+      <div className="historySongCard" onClick={() => {
+        handleSongClick(src);
+        setSong(src);
+        
+        
+      }}>
+        <div className="hSongCardImg">
+          <img src={`http://localhost:8080/artist/image/${src.artistName}`} alt="" />
+        </div>
+        <p className="artistTitle">{src.artistName}</p>
+        <div className="songTitle">
+          <p>{src.songName}</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -171,9 +191,7 @@ function Home() {
                       return (
                         <React.Fragment key={index}>
                           {displayHistory(
-                            src.image,
-                            src.songName,
-                            src.artistName
+                            src
                           )}
                         </React.Fragment>
                       );

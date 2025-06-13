@@ -14,6 +14,7 @@ import Features from './components/Features/Features';
 import ContactUsPage from './components/ContactUs/ContactUsPage';
 import Browse from './components/Browse/Browse';
 import RateUs from './components/Rateus/Rateus';
+import Artists from './components/Artists/Artists';
 
 
 function App() {
@@ -34,7 +35,7 @@ function App() {
             <Route path='/contactUsPage' element={<ContactUsPage />} />
             <Route path='/browse' element={<Browse />} />
             <Route path='/rateus' element={<RateUs />} />
-
+            <Route path='/artists' element={<Artists/>} />
           </Routes>
         </Router>
       </UserProvider>

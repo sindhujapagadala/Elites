@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import "./Upload.css";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -11,6 +11,7 @@ const BASE_URL = "http://localhost:8080/song";
 
 export default function Upload() {
 
+  const navigate = useNavigate();
   const { user } = useUser();
   const { setUser} = useUser();
 
@@ -21,6 +22,12 @@ export default function Upload() {
     songFile: null,
     category: "bollywood",
   });
+
+  useEffect(() => {
+        if (!user) {
+          navigate("/");
+        }
+      });
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
