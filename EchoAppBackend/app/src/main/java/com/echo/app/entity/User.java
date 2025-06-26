@@ -39,5 +39,7 @@ public class User {
     private String imgId;
     private LocalDateTime date = LocalDateTime.now();
     private boolean isArtist = false;
-    
+    private List<String> likedSongs = new ArrayList<>();
+private List<String> dislikedSongs = new ArrayList<>();
+
 }

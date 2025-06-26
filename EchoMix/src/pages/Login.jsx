@@ -1,22 +1,28 @@
 import { useState } from "react";
 import axios from "axios";
+import { useUser } from "../../UserContext/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const { setUser } = useUser();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `http://localhost:8080/user/login?name=${name}&email=${email}&password=${password}`
-      );
+      const response = await axios.post("http://localhost:8080/user/login", {
+        email: email,
+        password: password,
+      });
 
       if (response.status === 200) {
         console.log("Login successful:", response.data);
+        setUser(response.data);
+        navigate("/category"); 
       }
     } catch (error) {
       if (error.response) {
@@ -30,12 +36,6 @@ function Login() {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
         <input
           type="email"
           placeholder="Email"

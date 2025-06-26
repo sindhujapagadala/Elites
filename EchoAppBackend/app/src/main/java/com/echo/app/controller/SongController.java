@@ -239,6 +239,70 @@ public class SongController {
         List<Song> songs = songService.getSongsByCategory(category);
         return songs.stream().map(SongResponse::new).collect(Collectors.toList());
     }
+    @PostMapping("/like/{songId}")
+    public ResponseEntity<?> likeSong(@PathVariable String songId, @RequestParam String userName) {
+        if (!ObjectId.isValid(songId)) {
+            return ResponseEntity.badRequest().body("Invalid song ID format.");
+        }
+        Optional<User> userOpt = userService.findByUserName(userName);
+        if (userOpt.isEmpty()) return ResponseEntity.badRequest().body("User not found");
+        User user = userOpt.get();
+        if (!user.getLikedSongs().contains(songId)) {
+            user.getLikedSongs().add(songId);
+            user.getDislikedSongs().remove(songId); 
+            userService.saveUser(user);
+        }
+
+        return ResponseEntity.ok("Song liked successfully.");
+    }
+
+    @PostMapping("/dislike/{songId}")
+    public ResponseEntity<?> dislikeSong(@PathVariable String songId, @RequestParam String userName) {
+        if (!ObjectId.isValid(songId)) {
+            return ResponseEntity.badRequest().body("Invalid song ID format.");
+        }
+        Optional<User> userOpt = userService.findByUserName(userName);
+        if (userOpt.isEmpty()) return ResponseEntity.badRequest().body("User not found");
+
+        User user = userOpt.get();
+        if (!user.getDislikedSongs().contains(songId)) {
+            user.getDislikedSongs().add(songId);
+            user.getLikedSongs().remove(songId); 
+            userService.saveUser(user);
+        }
+
+        return ResponseEntity.ok("Song disliked successfully.");
+    }
+@GetMapping("/liked")
+public ResponseEntity<?> getLikedSongs(@RequestParam String userName) {
+    Optional<User> userOpt = userService.findByUserName(userName);
+    if (userOpt.isEmpty()) return ResponseEntity.badRequest().body("User not found");
+
+    User user = userOpt.get();
+    List<Song> likedSongs = user.getLikedSongs().stream()
+        .map(id -> songService.getSong(new ObjectId(id)))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .toList();
+
+    return ResponseEntity.ok(likedSongs);
+}
+
+@GetMapping("/disliked")
+public ResponseEntity<?> getDislikedSongs(@RequestParam String userName) {
+    Optional<User> userOpt = userService.findByUserName(userName);
+    if (userOpt.isEmpty()) return ResponseEntity.badRequest().body("User not found");
+
+    User user = userOpt.get();
+    List<Song> dislikedSongs = user.getDislikedSongs().stream()
+        .map(id -> songService.getSong(new ObjectId(id)))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .toList();
+
+    return ResponseEntity.ok(dislikedSongs);
+}
+
 
     @GetMapping("/search")
     public ResponseEntity<?> searchSongsByName(@RequestParam String keyword) {
