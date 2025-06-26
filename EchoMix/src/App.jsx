@@ -14,7 +14,15 @@ import Features from './components/Features/Features';
 import ContactUsPage from './components/ContactUs/ContactUsPage';
 import Browse from './components/Browse/Browse';
 import RateUs from './components/Rateus/Rateus';
+<<<<<<< likeAndDislikeFeature
 import LikedSongs from './components/LikedSongs/LikedSongs';
+=======
+import Artists from './components/Artists/Artists';
+import RecentlyePlayed from './components/RecentlyPlayed/RecentlyPlayed';
+import Artist from './components/Artist/Artist';
+
+
+>>>>>>> main
 function App() {
   return (
     <>
@@ -33,8 +41,14 @@ function App() {
             <Route path='/contactUsPage' element={<ContactUsPage />} />
             <Route path='/browse' element={<Browse />} />
             <Route path='/rateus' element={<RateUs />} />
+<<<<<<< likeAndDislikeFeature
             <Route path='/liked' element={<LikedSongs />} />
 
+=======
+            <Route path='/artists' element={<Artists/>} />
+            <Route path='/recentlyPlayed' element={<RecentlyePlayed />} />
+            <Route path='/artist/:artistName' element={<Artist />} />
+>>>>>>> main
           </Routes>
         </Router>
       </UserProvider>

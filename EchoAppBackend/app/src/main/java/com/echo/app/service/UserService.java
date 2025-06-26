@@ -1,5 +1,6 @@
 package com.echo.app.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
@@ -36,5 +37,9 @@ public class UserService {
         userRepository.deleteById(id);
     }
     
+    public List<User> findByIsArtistTrueAndUserNameContainingIgnoreCase(String keyword) {
+        return userRepository.findByIsArtistTrueAndUserNameContainingIgnoreCase(keyword);
+    }
+
 
 }

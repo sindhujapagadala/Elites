@@ -3,11 +3,9 @@ package com.echo.app.controller;
 import com.echo.app.entity.OtpDetails;
 import com.echo.app.entity.OtpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
-import java.util.Map;
 
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,7 +1,9 @@
 package com.echo.app.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.echo.app.entity.User;
+import com.echo.app.entity.UserResponse;
 import com.echo.app.service.UserService;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
@@ -59,6 +62,29 @@ public class ArtistController {
             }
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Artist not found");
+        }
+    }
+
+    @GetMapping("/search/artists")
+    public List<UserResponse> searchArtists(@RequestParam("keyword") String keyword) {
+        return userService.findByIsArtistTrueAndUserNameContainingIgnoreCase(keyword)
+                .stream()
+                .map(UserResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/search/{artistName}")
+    public ResponseEntity<UserResponse> getArtistByName(@PathVariable String artistName) {
+        Optional<User> optionalUser = userService.findByUserName(artistName);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (user.isArtist()) {
+                return ResponseEntity.ok(new UserResponse(user));
+            } else {
+                return ResponseEntity.status(HttpServletResponse.SC_FORBIDDEN).build();
+            }
+        } else {
+            return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).build();
         }
     }
 

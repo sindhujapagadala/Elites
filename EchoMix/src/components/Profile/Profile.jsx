@@ -1,21 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUser } from '../../UserContext/UserContext';
 import './Profile.css';
+import { useNavigate } from 'react-router';
 
 const Profile = () => {
+  const { user } = useUser();
+  const navigate = useNavigate();
 
-  const {user} = useUser();
-  const imageId = user.imgId;
+  useEffect(() => {
+    if (!user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
-  const profilePicSrc = (imageId!=null && imageId!="" )? `http://localhost:8080/user/image/${imageId}` : "https://avatar.iran.liara.run/public/boy?username=Ash";
+  const imageId = user?.imgId;
+  const profilePicSrc = imageId
+    ? `http://localhost:8080/user/image/${imageId}`
+    : 'https://avatar.iran.liara.run/public/boy?username=Ash';
 
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    name: `${user.userName}`,
+    name: user?.userName || '',
     bio: 'Music lover. Frontend enthusiast. Developer at heart.',
     genre: 'Pop, Lo-fi, Indie',
-    image: `${profilePicSrc}`,
-    preferences: ['Lo-fi', 'Indie', 'K-Pop']
+    image: profilePicSrc,
+    preferences: ['Lo-fi', 'Indie', 'K-Pop'],
   });
 
   const listeningHistory = [
@@ -26,11 +35,11 @@ const Profile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfileData({ ...profileData, [name]: value });
+    setProfileData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleToggleEdit = () => {
-    setIsEditing(!isEditing);
+    setIsEditing((prev) => !prev);
   };
 
   const handleImageChange = (e) => {
@@ -38,7 +47,7 @@ const Profile = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileData({ ...profileData, image: reader.result });
+        setProfileData((prev) => ({ ...prev, image: reader.result }));
       };
       reader.readAsDataURL(file);
     }
@@ -103,6 +112,7 @@ const Profile = () => {
               ))}
             </div>
           </div>
+
         </div>
       </div>
     </>

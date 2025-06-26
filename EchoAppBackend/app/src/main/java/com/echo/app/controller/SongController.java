@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -105,16 +104,15 @@ public class SongController {
 
     @GetMapping("/updateList/{userName}/{songId}")
     public ResponseEntity<?> updateSongList(@PathVariable String userName, @PathVariable String songId) {
-        // Implement your logic to update the song list for the user
+     
         Optional<User> userOpt = userService.findByUserName(userName);
-        if (userOpt.isPresent()) {  
+        if (userOpt.isPresent()) {
             User user = userOpt.get();
             List<String> recentlyPlayed = user.getRecentlyPlayed();
             if (recentlyPlayed == null) {
                 recentlyPlayed = new ArrayList<>();
             }
 
-            // If songId already exists, remove it to add it at the front
             recentlyPlayed.remove(songId);
 
             recentlyPlayed.add(0, songId);
@@ -124,7 +122,7 @@ public class SongController {
             user.setRecentlyPlayed(recentlyPlayed);
             userService.saveUser(user);
             System.out.println("Updated recently played songs: " + recentlyPlayed);
-            
+
             return ResponseEntity.ok().body("Song list updated successfully.");
         } else {
             System.out.println("User not found: " + userName);
@@ -132,10 +130,9 @@ public class SongController {
 
         }
     }
-    
 
     @GetMapping("/stream/{fileId}")
-    public ResponseEntity<?> streamSong( @PathVariable String fileId,
+    public ResponseEntity<?> streamSong(@PathVariable String fileId,
             HttpServletResponse response) {
         ObjectId objectId;
         try {
@@ -181,20 +178,44 @@ public class SongController {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             List<String> recentlyPlayed = user.getRecentlyPlayed();
-            
-            List<Song> historyList = new ArrayList<>();
+            List<Song> matchedSongs= new ArrayList<>();
             for(String songId : recentlyPlayed) {
-                Optional<Song> songOpt = songService.getSong(new ObjectId(songId));
-                if (songOpt.isPresent()) {
-                    historyList.add(songOpt.get());
-                }
+                Optional<Song> matchedSong = songService.getSong(new ObjectId(songId));
+                matchedSong.ifPresent(matchedSongs::add);
             }
-            
-            return ResponseEntity.ok().body(historyList);
+            List<SongResponse> responseList = matchedSongs.stream()
+                .map(SongResponse::new)
+                .collect(Collectors.toList());
+
+
+
+            return ResponseEntity.ok().body(responseList);
         } else {
             return ResponseEntity.badRequest().body("User not found.");
         }
     }
+
+    @GetMapping("/getArtistSongs/{artistName}")
+    public ResponseEntity<?> getArtistSongs(@PathVariable String artistName) {
+         Optional<User> userOpt = userService.findByUserName(artistName);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            List<String> artistSongs = user.getUserSongs();
+            List<Song> matchedSongs= new ArrayList<>();
+            for(String songId : artistSongs) {
+                Optional<Song> matchedSong = songService.getSong(new ObjectId(songId));
+                matchedSong.ifPresent(matchedSongs::add);
+            }
+            List<SongResponse> responseList = matchedSongs.stream()
+                .map(SongResponse::new)
+                .collect(Collectors.toList());
+
+            return ResponseEntity.ok().body(responseList);
+        } else {
+            return ResponseEntity.badRequest().body("User not found.");
+        }
+    }
+    
 
     @DeleteMapping("delete/{id}")
     public ResponseEntity<?> deleteSong(@PathVariable ObjectId id) {
@@ -282,5 +303,15 @@ public ResponseEntity<?> getDislikedSongs(@RequestParam String userName) {
     return ResponseEntity.ok(dislikedSongs);
 }
 
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchSongsByName(@RequestParam String keyword) {
+        List<Song> matchedSongs = songService.searchSongsByName(keyword);
+        List<SongResponse> responseList = matchedSongs.stream()
+                .map(SongResponse::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(responseList);
+    }
 
 }
