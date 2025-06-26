@@ -116,7 +116,11 @@ body, .playlist-page {
   gap: 20px;
   max-height: calc(100vh - 250px); 
   overflow-y: auto;
-  
+  padding-top: 2%;
+  padding-bottom: 8%;
+}
+.songs-grid::-webkit-scrollbar {
+  width: 0px;
 }
 
 .spacer{

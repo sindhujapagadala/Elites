@@ -39,7 +39,6 @@ function App() {
             <Route path='/contactUsPage' element={<ContactUsPage />} />
             <Route path='/browse' element={<Browse />} />
             <Route path='/rateus' element={<RateUs />} />
-
             <Route path='/liked' element={<LikedSongs />} />
             <Route path='/artists' element={<Artists/>} />
             <Route path='/recentlyPlayed' element={<RecentlyePlayed />} />

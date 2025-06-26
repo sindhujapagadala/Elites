@@ -10,32 +10,53 @@ function Artists() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [artistList, setArtistList] = useState([]);
-
   useEffect(() => {
     if (!user) {
       navigate("/");
-    } 
+    } else {
+      fetchAllArtistsByAlphabet();
+    }
   }, []);
+
+  function fetchAllArtistsByAlphabet() {
+    const letters = "abcdefghijklmnopqrstuvwxyz".split("");
+    const allResults = [];
+
+    Promise.all(
+      letters.map((letter) =>
+        fetch(`http://localhost:8080/artist/search/artists?keyword=${letter}`)
+          .then((res) => res.json())
+          .then((data) => {
+            allResults.push(...data);
+          })
+          .catch((err) => console.error(`Failed for letter ${letter}:`, err))
+      )
+    ).then(() => {
+      const uniqueArtists = Array.from(
+        new Map(allResults.map((artist) => [artist.userName, artist])).values()
+      );
+      setArtistList(uniqueArtists);
+    });
+  }
 
   function getArtistImgSrc(artistName) {
     return `http://localhost:8080/artist/image/${artistName}`;
   }
 
- 
   function handleSearchChange(e) {
-    const value = e.target.value;
-    setSearchQuery(value);
+  const value = e.target.value;
+  setSearchQuery(value);
 
-    if (value.trim() === "") {
-      
-      return;
-    }
-
-    fetch(`http://localhost:8080/artist/search/artists?keyword=${value}`)
-      .then((res) => res.json())
-      .then((data) => setArtistList(data))
-      .catch((err) => console.error("Search failed:", err));
+  if (value.trim() === "") {
+    fetchAllArtistsByAlphabet();
+    return;
   }
+
+  fetch(`http://localhost:8080/artist/search/artists?keyword=${value}`)
+    .then((res) => res.json())
+    .then((data) => setArtistList(data))
+    .catch((err) => console.error("Search failed:", err));
+}
 
   function createArtistCard(artist, index) {
     return (
@@ -43,7 +64,7 @@ function Artists() {
         key={index}
         className="Artists-songCard"
         onClick={() => {
-          navigate(`/artist/${artist.userName}`)
+          navigate(`/artist/${artist.userName}`);
         }}
       >
         <img
