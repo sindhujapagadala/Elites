@@ -17,6 +17,7 @@ import RateUs from './components/Rateus/Rateus';
 import Artists from './components/Artists/Artists';
 import RecentlyePlayed from './components/RecentlyPlayed/RecentlyPlayed';
 import Artist from './components/Artist/Artist';
+import MySongs from './components/MySongs/MySongs';
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
             <Route path='/artists' element={<Artists/>} />
             <Route path='/recentlyPlayed' element={<RecentlyePlayed />} />
             <Route path='/artist/:artistName' element={<Artist />} />
+            <Route path='/mySongs' element={<MySongs></MySongs>}/>
           </Routes>
         </Router>
       </UserProvider>

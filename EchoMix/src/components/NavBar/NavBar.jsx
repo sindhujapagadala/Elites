@@ -43,6 +43,10 @@ function NavBar() {
     navigate("/recentlyPlayed");
   }
 
+  function toMySongs() {
+    navigate("/mySongs");
+  }
+
   return (
     <div className="navBar">
       <div className="libButtons">
@@ -56,7 +60,7 @@ function NavBar() {
       <div className="myMusicContainer">
         <div className="contTitle">My Music</div>
         <li onClick={toRecentlyPlayed}>Recently Played</li>
-        <li>My Songs</li>
+        <li onClick={toMySongs}>My Songs</li>
         <li onClick={toUpload}>Upload Song</li>
       </div>
       

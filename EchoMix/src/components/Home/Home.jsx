@@ -204,7 +204,7 @@ function Home() {
                       );
                     })
                   ) : (
-                    <p>No recently played songs</p>
+                    <p className="noSongMessage">No recently played songs</p>
                   )}
                 </div>
               </div>

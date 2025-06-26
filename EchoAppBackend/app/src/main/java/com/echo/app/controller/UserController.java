@@ -7,7 +7,9 @@ import java.util.Optional;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+
 import org.springframework.data.mongodb.gridfs.GridFsResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StreamUtils;
@@ -20,6 +22,7 @@ import com.echo.app.service.UserService;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
 import com.mongodb.client.gridfs.model.GridFSUploadOptions;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -28,18 +31,17 @@ import jakarta.servlet.http.HttpServletResponse;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private GridFSBucket gridFSBucket;
 
     @Autowired
-    private GridFSBucket gridFSBucket;
+    private UserService userService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createUser(
             @RequestParam("name") String name,
             @RequestParam("email") String email,
             @RequestParam("password") String password,
-            @RequestPart(value = "profilePic", required = false) MultipartFile profileImage
-    ) throws IOException {
+            @RequestPart(value = "profilePic", required = false) MultipartFile profileImage) throws IOException {
 
         if (userService.findByUserName(name).isPresent()) {
             return ResponseEntity.badRequest().body("Username already exists.");
@@ -52,10 +54,9 @@ public class UserController {
         if (profileImage != null && !profileImage.isEmpty()) {
             try (var is = profileImage.getInputStream()) {
                 imageId = gridFSBucket.uploadFromStream(
-                    profileImage.getOriginalFilename(), 
-                    is,
-                    new GridFSUploadOptions().chunkSizeBytes(358400)
-                );
+                        profileImage.getOriginalFilename(),
+                        is,
+                        new GridFSUploadOptions().chunkSizeBytes(358400));
             }
         }
 
@@ -73,16 +74,14 @@ public class UserController {
         try {
             userService.saveUser(user);
             user.setPassword(null);
-            
+
             return ResponseEntity.ok(user);
         } catch (DuplicateKeyException e) {
-    
+
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    
-  
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest request) {
         Optional<User> opt = userService.findByEmail(request.getEmail());
@@ -99,14 +98,14 @@ public class UserController {
     }
 
     @GetMapping("/image/{id}")
-    public void getImageById(@PathVariable String id, HttpServletResponse response) throws IllegalStateException, IOException{
+    public void getImageById(@PathVariable String id, HttpServletResponse response)
+            throws IllegalStateException, IOException {
         ObjectId fileId = new ObjectId(id);
         GridFSDownloadStream downloadStream = gridFSBucket.openDownloadStream(fileId);
-         GridFsResource resource = new GridFsResource(downloadStream.getGridFSFile(), downloadStream);
-         response.setContentType("image/jpeg");
-         StreamUtils.copy(resource.getInputStream(), response.getOutputStream());
+        GridFsResource resource = new GridFsResource(downloadStream.getGridFSFile(), downloadStream);
+        response.setContentType("image/jpeg");
+        StreamUtils.copy(resource.getInputStream(), response.getOutputStream());
     }
-
 
     @GetMapping("/artist/{artistName}")
     public ResponseEntity<?> getArtist(@PathVariable String artistName) {
@@ -130,7 +129,7 @@ public class UserController {
             return ResponseEntity.badRequest().body("User not found.");
         }
         User user = opt.get();
-        userService.deleteById(user.getId());  // remove by ObjectId
+        userService.deleteById(user.getId()); // remove by ObjectId
         return ResponseEntity.ok("User deleted successfully.");
     }
 
@@ -142,4 +141,28 @@ public class UserController {
         }
         return ResponseEntity.ok(opt.get().getUserSongs());
     }
+
+    @PostMapping("/update/by-email")
+    public ResponseEntity<?> updateUserByEmail(
+            @RequestParam("email") String email,
+            @RequestParam("userName") String userName) {
+
+        Optional<User> optionalUser = userService.findByEmail(email);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        User user = optionalUser.get();
+        user.setUserName(userName);
+
+
+        try {
+            userService.saveUser(user);
+            user.setPassword(null); 
+            return ResponseEntity.ok(user);
+        } catch (DuplicateKeyException e) {
+            return ResponseEntity.badRequest().body("Username or email already exists");
+        }
+    }
+
 }
