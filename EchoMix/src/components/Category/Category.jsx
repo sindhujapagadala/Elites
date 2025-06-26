@@ -7,6 +7,8 @@ const Category = () => {
   const [category, setCategory] = useState("bollywood");
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [likeInProgress, setLikeInProgress] = useState(null);
+  const [dislikeInProgress, setDislikeInProgress] = useState(null);
   const { user, setUser, setSong } = useUser();
 
   useEffect(() => {
@@ -19,6 +21,7 @@ const Category = () => {
         setSongs(res.data);
       } catch (err) {
         console.error("Error fetching songs:", err);
+        alert("Failed to load songs. Please try again.");
       }
       setLoading(false);
     };
@@ -34,9 +37,59 @@ const Category = () => {
       console.error("Error updating song list:", error);
     }
     setSong(song);
-    console.log("Song object:", song);
-    console.log("Song ID:", song.id);
   }
+
+  const handleLike = async (song) => {
+    if (!user || !user.userName) {
+      console.error("User is not logged in");
+      alert("Please login to like a song.");
+      return;
+    }
+
+    setLikeInProgress(song.id);
+    try {
+      await axios.post(
+        `http://localhost:8080/song/like/${song.id}`,
+        null,
+        {
+          params: {
+            userName: user.userName,
+          },
+        }
+      );
+      console.log(`Liked ${song.songName}`);
+    } catch (error) {
+      console.error("Error liking song:", error);
+      alert("Failed to like the song.");
+    }
+    setLikeInProgress(null);
+  };
+
+  const handleDislike = async (song) => {
+    if (!user || !user.userName) {
+      console.error("User is not logged in");
+      alert("Please login to dislike a song.");
+      return;
+    }
+
+    setDislikeInProgress(song.id);
+    try {
+      await axios.post(
+        `http://localhost:8080/song/dislike/${song.id}`,
+        null,
+        {
+          params: {
+            userName: user.userName,
+          },
+        }
+      );
+      console.log(`Disliked ${song.songName}`);
+    } catch (error) {
+      console.error("Error disliking song:", error);
+      alert("Failed to dislike the song.");
+    }
+    setDislikeInProgress(null);
+  };
 
   return (
     <div className="playlist-page">
@@ -46,6 +99,7 @@ const Category = () => {
           Choose a category and vibe with your favorite tracks
         </p>
       </header>
+
       <main className="content">
         <div className="playlist-header">
           <h2 className="playlist-title">Selected Category</h2>
@@ -66,6 +120,7 @@ const Category = () => {
             <option value="classical">Classical</option>
           </select>
         </div>
+
         {loading ? (
           <div className="loading">Loading songs...</div>
         ) : songs.length === 0 ? (
@@ -83,6 +138,24 @@ const Category = () => {
                   className="audio-player"
                   onPlay={() => handleClick(song)}
                 />
+                <div className="song-actions">
+                  <button
+                    onClick={() => handleLike(song)}
+                    className="like-btn"
+                    disabled={likeInProgress === song.id}
+                  >
+                    {likeInProgress === song.id ? "Liking..." : "👍 Like"}
+                  </button>
+                  <button
+                    onClick={() => handleDislike(song)}
+                    className="dislike-btn"
+                    disabled={dislikeInProgress === song.id}
+                  >
+                    {dislikeInProgress === song.id
+                      ? "Disliking..."
+                      : "👎 Dislike"}
+                  </button>
+                </div>
               </div>
             ))}
             <div className="spacer"></div>
@@ -92,4 +165,5 @@ const Category = () => {
     </div>
   );
 };
+
 export default Category;
